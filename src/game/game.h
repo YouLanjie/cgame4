@@ -20,6 +20,10 @@ extern short LOCK;
 
 /* About game running */
 void game_running();
+int game_input(int *input);
+
+/* About game hook */
+int block_n4_open_door(void);
 
 /*
  * About game map

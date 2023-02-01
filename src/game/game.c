@@ -10,12 +10,60 @@
 
 #include "game.h"
 
+struct game_data game_data = {
+	NULL,
+	NULL,
+	{
+		{
+			NULL,
+			100,
+			{10, 10},
+			{10, 10},
+			{&game_data.drop_list[0], &game_data.drop_list[0]},
+			{&game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0]},
+			{&game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0]},
+		},
+		PLAYER_DEF_Y,
+		PLAYER_DEF_X,
+		0,
+		0,
+		0
+	},
+	0,
+	/* Name Print Describe Hook Option */
+	{{"null", '~', "null",
+	  {NULL, NULL, NULL},
+	  {0, 0}}
+	},
+	{{"Player", '@', "player",
+	  {NULL, NULL, NULL},
+	  {0, 0}}
+	},
+	{{"Null", ' ', "null",
+	  {NULL, NULL, NULL},
+	  {-1, 0}},
+	 {"Wall", '#', "wall",
+	  {NULL, NULL, NULL},
+	  {0, 0}},
+	 {"floor", '.', "floor",
+	  {NULL, NULL, NULL},
+	  {1, 0}},
+	 {"Door close", '+', "This is a close door",
+	  {NULL, block_n4_open_door, NULL},
+	  {0, 1}},
+	 {"Door open", '-', "This is a open door",
+	  {NULL, NULL, NULL},
+	  {1, 0}}
+	 /* hook: run use attack */
+	}
+};
+
 /* def a var to use timer */
 struct itimerval tick;
 
 short LOCK;
 
-static int input_key(int *result);
+static int game_input_key(int *result);
 
 /*
  * 游戏函数
@@ -44,7 +92,7 @@ int game(int start_mode)
 	setitimer(ITIMER_REAL, &tick, NULL);
 
 	while (input != 0) {
-		input_key(&input);
+		game_input_key(&input);
 		gettimeofday(&gettime, NULL);
 		if (gettime.tv_sec - l_sec < 1 &&
 		    gettime.tv_usec - l_usec < 10000) {
@@ -54,39 +102,7 @@ int game(int start_mode)
 		l_usec = gettime.tv_usec;
 		l_sec  = gettime.tv_sec;
 		map_get(game_data.player.pos_y, game_data.player.pos_x);
-		switch (input) {
-		case 'k':
-			if (game_data.player.pos_y > 1 &&
-			    game_data.focus->up->block->opt == 1) {
-				game_data.player.pos_y--;
-			}
-			break;
-		case 'j':
-			if (game_data.player.pos_y < MAP_HEIGHT &&
-			    game_data.focus->down->block->opt == 1) {
-				game_data.player.pos_y++;
-			}
-			break;
-		case 'h':
-			if (game_data.player.pos_x > 1 &&
-			    game_data.focus->left->block->opt == 1) {
-				game_data.player.pos_x--;
-			}
-			break;
-		case 'l':
-			if (game_data.player.pos_x < MAP_WIDTH &&
-			    game_data.focus->right->block->opt == 1) {
-				game_data.player.pos_x++;
-			}
-			break;
-		case 'q':
-		case 'Q':
-		case 0x1b:
-			input = 0;
-			break;
-		default:
-			break;
-		}
+		game_input(&input);
 		if (LOCK) {
 			continue;
 		} else {
@@ -102,7 +118,7 @@ int game(int start_mode)
 /*
  * 转换输入按键
  */
-static int input_key(int *result)
+static int game_input_key(int *result)
 {
 	*result = getch();
 	if (*result == 0x1B && ctools_kbhit() == 1 && getchar() == '[') {

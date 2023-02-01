@@ -11,6 +11,24 @@
 #ifndef DEF_H
 #define DEF_H
 
+#define BLOCK_LIST_MAX 5
+#define ENTITY_LIST_MAX 1
+#define DROP_LIST_MAX 1
+
+#define BLOCK_OPT_MAX 2
+/* 可移动？ */
+#define BLOCK_OPT_N_MOV 0
+/* 可使用？攻击？ */
+#define BLOCK_OPT_N_USE 1
+
+#define BLOCK_HOOK_MAX 3
+/* 运行 */
+#define BLOCK_HOOK_N_RUN 0
+/* 使用 */
+#define BLOCK_HOOK_N_USE 1
+/* 攻击 */
+#define BLOCK_HOOK_N_ATK 2
+
 /*
  * 基本数据存储结构定义
  */
@@ -18,13 +36,11 @@
 struct game_info {
 	const char  *name;        /* 名字 */
 	const char   print_ch;    /* 打印使用字符 */
-	const short  opt;         /* 储存选项 */
 	const char  *describe;    /* 描述 */
 	/* Action */
-	int (*const hook_use)();    /* By left hand */
-	int (*const hook_attack)(); /* By right hand */
-	int (*const hook_touch)();  /* By touching */
-	int (*const hook_every)();  /* By game running */
+	int (*const hook[BLOCK_HOOK_MAX])();
+	/* Option */
+	const short opt[BLOCK_OPT_MAX];
 };
 
 /* 实体 */
@@ -73,10 +89,6 @@ struct game_player {
 	short              XP;        /* 经验值 */
 	short              level;     /* 等级 */
 };
-
-#define BLOCK_LIST_MAX 4
-#define ENTITY_LIST_MAX 1
-#define DROP_LIST_MAX 1
 
 /* 游戏信息访问接口 */
 struct game_data {

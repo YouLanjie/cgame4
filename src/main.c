@@ -11,37 +11,6 @@
 
 #include "../include/head.h"
 
-struct game_data game_data = {
-	NULL,
-	NULL,
-	{
-		{
-			NULL,
-			100,
-			{10, 10},
-			{10, 10},
-			{&game_data.drop_list[0], &game_data.drop_list[0]},
-			{&game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0]},
-			{&game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0]},
-		},
-		PLAYER_DEF_Y,
-		PLAYER_DEF_X,
-		0,
-		0,
-		0
-	},
-	0,
-	{{"null", '~', 0, "null", NULL, NULL, NULL, NULL}
-	},
-	{{"Player", '@', 0, "player", NULL, NULL, NULL, NULL}
-	},
-	{{"Null", ' ', 0, "null", NULL, NULL, NULL, NULL},
-	 {"Wall", '#', 2, "wall", NULL, NULL, NULL, NULL},
-	 {"floor", '.', 1, "floor", NULL, NULL, NULL, NULL},
-	 {"Door", '+', 2, "This is a door~~~", NULL, NULL, NULL, NULL}
-	}
-};
-
 static void init_color_pair(void);
 
 int main() {

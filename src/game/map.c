@@ -49,10 +49,10 @@ int map_set(int type, int id, int pos_y, int pos_x)
 	if (type == 1 && id < BLOCK_LIST_MAX) {    /* 方块 */
 		game_data.focus->block = &game_data.block_list[id];
 	} else if (type == 2 && id < ENTITY_LIST_MAX &&
-		   game_data.entity_list[id].opt == 1) {    /* 友好生物 */
+		   game_data.entity_list[id].opt[0] == 1) {    /* 友好生物 */
 		game_data.focus->friendly->data = &game_data.entity_list[id];
 	} else if (type == 3 && id < ENTITY_LIST_MAX &&
-		   game_data.entity_list[id].opt == 2) {    /* 敌对生物 */
+		   game_data.entity_list[id].opt[0] == 2) {    /* 敌对生物 */
 		game_data.focus->monsters->data = &game_data.entity_list[id];
 	} else if (type == 4 && id < DROP_LIST_MAX) {    /* 掉落物 */
 		game_data.focus->drop->data = &game_data.drop_list[id];
@@ -165,13 +165,13 @@ int map_print(void)
 		map_get(i, 1);
 		for (int i2 = 1; map->right != NULL; ++i2) {
 			map_get(i, i2);
-			if (map->block->opt == 0) {
+			if (map->block->opt[BLOCK_OPT_N_MOV] == -1) {
 				attroff(COLOR_PAIR(C_WHITE_BLUE));
 			}
 			/* 打印方块 */
 			mvprintw(i - 1, i2 - 1, "%c",
 				 map->block->print_ch);
-			if (map->block->opt == 0) {
+			if (map->block->opt[0] == -1) {
 				attron(COLOR_PAIR(C_WHITE_BLUE));
 			}
 			/* 打印掉落物 */
@@ -223,6 +223,13 @@ int map_print(void)
 		 "Y:%3d X:%3d",
 		 game_data.player.pos_y,
 		 game_data.player.pos_x);
+	map_get(game_data.player.pos_y, game_data.player.pos_x);
+	mvprintw(MAP_HEIGHT + 5, 0,
+		 "Block Name:%s",
+		 game_data.focus->block->name);
+	mvprintw(MAP_HEIGHT + 6, 0,
+		 "Block Describe:%s",
+		 game_data.focus->block->describe);
 	refresh();
 	return 0;
 }
