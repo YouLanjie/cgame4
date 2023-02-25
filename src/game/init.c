@@ -13,14 +13,62 @@
 
 static int map_init(int y, int x);
 
+Info L_Block[] = {
+	{"H_Wall",   '-', "水平的墙", NULL},
+	{"V_Wall",   '|', "垂直的墙", NULL},
+	{"Floor",    '.', "房间内部的地板", NULL},
+	{"V_Door_c", '+', "对于垂直墙壁的关闭的门", NULL},
+	{"H_Door_c", '+', "对于水平墙壁的关闭的门", NULL},
+	{"V_Door_o", '-', "对于垂直墙壁的打开的门", NULL},
+	{"H_Door_o", '|', "对于水平墙壁的打开的门", NULL},
+	{"Corridor", '#', "这是走廊", NULL},
+	{"Null",     ' ', "虚空", NULL}
+};
+Info L_Entity[] = {
+	{"Player", '@', "这个是玩家", NULL}
+};
+Info L_Drop[] = {
+	{"NULL", '~', "这只是个垫数的", NULL}
+};
+
 /*
  * 初始化结构体数据
  */
 int init(void)
 {
+	Arg arg = {.i = 0};
 	if (game_data.map != NULL) {
 		free_pro(game_data.map);
 	}
+	/* 列表初始化 */
+
+#define BiARG(id, arg1, arg2)			\
+	arg.i = arg1;				\
+	Opt_add(&L_Block[id].opt, "Move", arg);	\
+	arg.i = arg2;				\
+	Opt_add(&L_Block[id].opt, "Use" , arg);
+
+#define BvARG(id, name, arg1)			\
+	arg.v = arg1;				\
+	Opt_add(&L_Block[id].opt, name, arg);	\
+
+	/*    Name       move use  */
+	BiARG(LN_hWall,    0, 0);
+	BiARG(LN_vWall,    0, 0);
+	BiARG(LN_floor,    1, 0);
+	BiARG(LN_vDoorC,   0, 1);
+	BvARG(LN_vDoorC,         "Hook Use",
+	                         block_n4_open_V_door);
+	BiARG(LN_hDoorC,   0, 1);
+	BvARG(LN_hDoorC,         "Hook Use",
+	                         block_n4_open_H_door);
+	BiARG(LN_vDoorO,   1, 0);
+	BiARG(LN_hDoorO,   1, 0);
+	BiARG(LN_corridor, 1, 0);
+	BiARG(LN_null,    -1, 0);
+#undef BiARG
+#undef BvARG
+
 	/* Init map */
 	map_init(MAP_HEIGHT, MAP_WIDTH);
 	game_data.focus = game_data.map;
@@ -29,10 +77,10 @@ int init(void)
 
 #define init_data(data, y, x)				\
 	do {						\
-		data = malloc(sizeof(struct game_map)); \
+		data = malloc(sizeof(Map));		\
 		data->pos_x = x;			\
 		data->pos_y = y;			\
-		data->block = &game_data.block_list[0];	\
+		data->block = &L_Block[LN_null];	\
 		data->drop  = NULL;			\
 		data->friendly = NULL;			\
 		data->monsters = NULL;			\
@@ -52,8 +100,7 @@ int init(void)
 static int map_init(int y, int x)
 {
 	struct timeval gettime;
-	struct game_map
-		*data = NULL,
+	Map	*data = NULL,
 		*last = NULL,
 		*up   = NULL;
 	for (int i = 1; i <= y; ++i) {

@@ -28,11 +28,18 @@ int block_n4_open_V_door(void);
 int block_n4_open_H_door(void);
 
 /*
+ * 关于选项
+ */
+Opt *Opt_add(Opt **obj, char *name, Arg var);
+Opt *Opt_get(Opt *Obj, char * name);
+int Opt_Mget(Opt *Obj);
+
+/*
  * About game map
  */
 /* 移动光标 */
 int map_get(int pos_y, int pos_x);
-int map_set(int type, int id, int pos_y, int pos_x);
+int map_set(int type, int name, int pos_y, int pos_x);
 int map_print(void);
 int map_mk_room(int y, int x);
 int map_mk_corridor(int y, int x);

@@ -1,0 +1,69 @@
+#+TITLE: Cgame4
+#+AUTHOR: youlanjie
+
+# +OPTIONS: toc:nil
+#+LATEX_COMPILER: xelatex
+#+LATEX_HEADER: \usepackage[UTF8]{ctex}
+#+setupfile: https://yzs249175311.github.io/org-html-theme-dull/org-html-theme-dull.setup
+
+* 简介
+尝试做个类Rougerlike游戏
+
+* TODO[0/4]
+- [ ] 添加走廊
+- [ ] 改良房间的生成实现
+- [ ] 增加多房间的生成功能
+- [ ] 其他我也不知道的东西
+
+* 数据存储结构（防止我忘了）
+** 地图（链表）
+*** 坐标
+**** pos_x
+**** pos_y
+*** 方块
+**** 基本信息 -> 信息列表.方块信息
+**** 被撅度
+*** 实体
+**** 基本信息 -> 信息列表.实体信息
+**** 血量HP
+**** 防御AC
+**** 攻击AT
+**** 背包[32]
+*** 掉落物（链表）
+**** 基本信息 -> 信息列表.实体信息
+**** 数量
+**** 下一物品 -> 掉落物
+*** 四周的节点
+** 地图指针 -> 特定地图节点
+** 玩家
+*** 基本信息 -> 实体
+*** 坐标
+**** pos_x
+**** pos_y
+*** 饥饿度
+*** 经验值
+*** 等级
+** 难度 int
+** 固定的信息列表
+*** 方块列表[]
+**** char * 名字
+**** char   打印字符
+**** char * 描述
+**** struct 属性[]
+***** char * 名字
+***** union  数值
+*** 实体列表[]
+**** char * 名字
+**** char   打印字符
+**** char * 描述
+**** struct 属性[]
+***** char * 名字
+***** union  数值
+*** 物品列表[]
+**** char * 名字
+**** char   打印字符
+**** char * 描述
+**** struct 属性[]
+***** char * 名字
+***** union  数值
+

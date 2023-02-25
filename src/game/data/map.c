@@ -9,7 +9,7 @@
  */
 
 
-#include "game.h"
+#include "../game.h"
 
 /*
  * 获取地图焦点
@@ -43,19 +43,17 @@ int map_get(int pos_y, int pos_x)
 /*
  * 设置地图存储信息
  */
-int map_set(int type, int id, int pos_y, int pos_x)
+int map_set(int type, int name, int pos_y, int pos_x)
 {
 	map_get(pos_y, pos_x);
-	if (type == 1 && id < BLOCK_LIST_MAX) {    /* 方块 */
-		game_data.focus->block = &game_data.block_list[id];
-	} else if (type == 2 && id < ENTITY_LIST_MAX &&
-		   game_data.entity_list[id].opt[0] == 1) {    /* 友好生物 */
-		game_data.focus->friendly->data = &game_data.entity_list[id];
-	} else if (type == 3 && id < ENTITY_LIST_MAX &&
-		   game_data.entity_list[id].opt[0] == 2) {    /* 敌对生物 */
-		game_data.focus->monsters->data = &game_data.entity_list[id];
-	} else if (type == 4 && id < DROP_LIST_MAX) {    /* 掉落物 */
-		game_data.focus->drop->data = &game_data.drop_list[id];
+	if (type == 1) {    /* 方块 */
+		game_data.focus->block = &L_Block[name];
+	} else if (type == 2 && Opt_get(L_Entity[name].opt, "type")->var.i == 1) {    /* 友好生物 */
+		game_data.focus->friendly->data = &L_Entity[name];
+	} else if (type == 3 && Opt_get(L_Block[name].opt, "type")->var.i == 2) {    /* 友好生物 */
+		game_data.focus->monsters->data = &L_Entity[name];
+	} else if (type == 4) {    /* 掉落物 */
+		game_data.focus->drop->data = &L_Drop[name];
 	}
 	return 0;
 }
@@ -115,7 +113,7 @@ int map_mk_room(int y, int x)
 				map_get(i, i2);
 				if (i != point[0] && i != y2 &&
 				    i2 != point[1] && i2 != x2) {
-					if (game_data.focus->block != &game_data.block_list[0]) {
+					if (game_data.focus->block != &L_Block[LN_null]) {
 						BORE = 1;
 						break;
 					} else {
@@ -138,29 +136,29 @@ int map_mk_room(int y, int x)
 			if (i == point[0] || i == y2) {
 				if (BORE == 0) {
 					if (i2 != point[1] && i2 != x2) {
-						game_data.focus->block = &game_data.block_list[5];
+						game_data.focus->block = &L_Block[LN_hDoorC];
 						BORE--;
 					} else {
-						game_data.focus->block = &game_data.block_list[1];
+						game_data.focus->block = &L_Block[LN_hWall];
 					}
 				} else {
-					game_data.focus->block = &game_data.block_list[1];
+					game_data.focus->block = &L_Block[LN_hWall];
 					BORE--;
 				}
 			} else if (i2 == point[1] || i2 == x2) {
 				if (BORE == 0) {
 					if (i != point[0] && i != y2) {
-						game_data.focus->block = &game_data.block_list[4];
+						game_data.focus->block = &L_Block[LN_vDoorC];
 						BORE--;
 					} else {
-						game_data.focus->block = &game_data.block_list[1];
+						game_data.focus->block = &L_Block[LN_hWall];
 					}
 				} else {
-					game_data.focus->block = &game_data.block_list[2];
+					game_data.focus->block = &L_Block[LN_vWall];
 					BORE--;
 				}
 			} else {
-				game_data.focus->block = &game_data.block_list[3];
+				game_data.focus->block = &L_Block[LN_floor];
 			}
 		}
 	}
@@ -172,17 +170,17 @@ int map_mk_room(int y, int x)
  */
 int map_mk_corridor(int y, int x)
 {
-	struct timeval gettime;
-	gettimeofday(&gettime, NULL);
-	srand(gettime.tv_usec + gettime.tv_sec);
-	point[0] = y - (y <= 2 ? 0: rand() % 3) - 1;
-	usleep(10 + rand() % 1000);
-	while (point[0] <= 0 || y - point[0] < 1) {
-		gettimeofday(&gettime, NULL);
-		srand(gettime.tv_usec + gettime.tv_sec);
-		point[0] = y - (y <= 2 ? 0: rand() % 3) - 1;
-		usleep(10 + rand() % 1000);
-	}
+	/* struct timeval gettime; */
+	/* gettimeofday(&gettime, NULL); */
+	/* srand(gettime.tv_usec + gettime.tv_sec); */
+	/* point[0] = y - (y <= 2 ? 0: rand() % 3) - 1; */
+	/* usleep(10 + rand() % 1000); */
+	/* while (point[0] <= 0 || y - point[0] < 1) { */
+	/* 	gettimeofday(&gettime, NULL); */
+	/* 	srand(gettime.tv_usec + gettime.tv_sec); */
+	/* 	point[0] = y - (y <= 2 ? 0: rand() % 3) - 1; */
+	/* 	usleep(10 + rand() % 1000); */
+	/* } */
 	return 0;
 }
 
@@ -192,6 +190,7 @@ int map_mk_corridor(int y, int x)
  */
 int map_print(void)
 {
+	Map *mAP = map;
 	clear();
 	attron(COLOR_PAIR(C_WHITE_BLUE));
 	map_get(1, 1);
@@ -199,13 +198,13 @@ int map_print(void)
 		map_get(i, 1);
 		for (int i2 = 1; map->right != NULL; ++i2) {
 			map_get(i, i2);
-			if (map->block->opt[BLOCK_OPT_N_MOV] == -1) {
+			if (Opt_get(map->block->opt, "Move")->var.i == -1) {
 				attroff(COLOR_PAIR(C_WHITE_BLUE));
 			}
 			/* 打印方块 */
 			mvprintw(i - 1, i2 - 1, "%c",
 				 map->block->print_ch);
-			if (map->block->opt[0] == -1) {
+			if (Opt_get(map->block->opt, "Move")->var.i == -1) {
 				attron(COLOR_PAIR(C_WHITE_BLUE));
 			}
 			/* 打印掉落物 */
@@ -243,16 +242,6 @@ int map_print(void)
 		 game_data.player.data.AT[1],
 		 game_data.player.XP,
 		 game_data.player.level);
-	mvprintw(MAP_HEIGHT + 2, 0,
-		 "Hand:%s %s",
-		 game_data.player.data.hand[0]->name,
-		 game_data.player.data.hand[1]->name);
-	mvprintw(MAP_HEIGHT + 3, 0,
-		 "Armour:%s %s %s %s",
-		 game_data.player.data.armour[0]->name,
-		 game_data.player.data.armour[1]->name,
-		 game_data.player.data.armour[2]->name,
-		 game_data.player.data.armour[3]->name);
 	mvprintw(MAP_HEIGHT + 4, 0,
 		 "Y:%3d X:%3d",
 		 game_data.player.pos_y,
@@ -267,4 +256,3 @@ int map_print(void)
 	refresh();
 	return 0;
 }
-#undef id

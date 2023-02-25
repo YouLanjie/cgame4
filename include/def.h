@@ -11,94 +11,102 @@
 #ifndef DEF_H
 #define DEF_H
 
-#define BLOCK_LIST_MAX 9
-#define ENTITY_LIST_MAX 1
-#define DROP_LIST_MAX 1
-
-#define BLOCK_OPT_MAX 2
-/* 可移动？ */
-#define BLOCK_OPT_N_MOV 0
-/* 可使用？攻击？ */
-#define BLOCK_OPT_N_USE 1
-
-#define BLOCK_HOOK_MAX 3
-/* 运行 */
-#define BLOCK_HOOK_N_RUN 0
-/* 使用 */
-#define BLOCK_HOOK_N_USE 1
-/* 攻击 */
-#define BLOCK_HOOK_N_ATK 2
-
 /*
  * 基本数据存储结构定义
  */
+
+typedef union {
+	int    i;
+	int  (*v)();
+	char  *ch;
+	char (*v_ch)();
+	void (*v_v)();
+}Arg;
+
+typedef struct game_info_opt Opt;
+typedef struct game_info_opt {
+	char *name;
+	Arg   var;
+	Opt  *next;
+}Opt;
+
 /* 基本信息 */
-struct game_info {
-	const char  *name;        /* 名字 */
-	const char   print_ch;    /* 打印使用字符 */
-	const char  *describe;    /* 描述 */
-	/* Action */
-	int (*const hook[BLOCK_HOOK_MAX])();
+typedef struct {
+	const char *name;        /* 名字 */
+	const char  print_ch;    /* 打印使用字符 */
+	const char *describe;    /* 描述 */
 	/* Option */
-	const short opt[BLOCK_OPT_MAX];
-};
+	Opt (*opt);
+}Info;
 
 /* 实体 */
-struct game_entity {
-	struct game_info   *data;          /* 基本信息 */
-	short               HP;            /* 血量 */
-	short               AC[2];         /* 防御值 */
-	short               AT[2];         /* 力量值（攻击力） */
-	struct game_info   *hand[2];       /* 手持物品 */
-	struct game_info   *armour[4];     /* 装备 */
-	struct game_info   *bag[26];       /* 背包 */
-};
+typedef struct {
+	Info  *data;          /* 基本信息 */
+	short  HP;            /* 血量 */
+	short  AC[2];         /* 防御值 */
+	short  AT[2];         /* 力量值（攻击力） */
+	Info  *bag[32];       /* 背包 */
+}Entity;
 
 /* 掉落物 */
-struct game_drop {
-	struct game_info *data;
-	short             num;
-	struct game_drop *next;
-};
+typedef struct game_drop Drop;
+typedef struct game_drop {
+	Info  *data;
+	short  num;    /* 数量 */
+	Drop  *next;
+}Drop;
 
 /*
  * 地图
  */
-struct game_map {
+typedef struct game_map Map;
+typedef struct game_map {
 	/* base info */
 	short pos_x;
 	short pos_y;
 	/* data in this point */
-	struct game_info   *block;       /* 地图方块(id) */
-	struct game_drop   *drop;        /* 掉落物 */
-	struct game_entity *friendly;    /* 友好生物 */
-	struct game_entity *monsters;    /* 怪物 */
+	Info   *block;       /* 地图方块 */
+	Drop   *drop;        /* 掉落物 */
+	Entity *friendly;    /* 友好生物 */
+	Entity *monsters;    /* 怪物 */
 	/* Link to other points */
-	struct game_map *up;
-	struct game_map *down;
-	struct game_map *left;
-	struct game_map *right;
-};
+	Map *up;
+	Map *down;
+	Map *left;
+	Map *right;
+}Map;
 
 /* 玩家 */
-struct game_player {
-	struct game_entity data;      /* 基本信息 */
-	short              pos_y;
-	short              pos_x;
-	short              hungry;    /* 饥饿度 */
-	short              XP;        /* 经验值 */
-	short              level;     /* 等级 */
-};
+typedef struct {
+	Entity data;      /* 基本信息 */
+	short  pos_y;
+	short  pos_x;
+	short  hungry;    /* 饥饿度 */
+	short  XP;        /* 经验值 */
+	short  level;     /* 等级 */
+}Player;
 
 /* 游戏信息访问接口 */
-struct game_data {
-	struct game_map    *map;         /* 地图信息 */
-	struct game_map    *focus;       /* 地图光标 */
-	struct game_player  player;      /* 玩家 */
-	short               diffcult;    /* 难度 */
-	struct game_info    drop_list[DROP_LIST_MAX];
-	struct game_info    entity_list[ENTITY_LIST_MAX];
-	struct game_info    block_list[BLOCK_LIST_MAX];
+typedef struct {
+	Map    *map;         /* 地图信息 */
+	Map    *focus;       /* 地图光标 */
+	Player  player;      /* 玩家 */
+	short   diffcult;    /* 难度 */
+}Data;
+
+extern Info L_Block[];
+enum LN_Block{
+	LN_hWall = 0,
+	LN_vWall,
+	LN_floor,
+	LN_vDoorC,
+	LN_hDoorC,
+	LN_vDoorO,
+	LN_hDoorO,
+	LN_corridor,
+	LN_null
 };
+extern Info L_Entity[];
+extern Info L_Drop[];
 
 #endif

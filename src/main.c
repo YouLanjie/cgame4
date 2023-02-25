@@ -35,7 +35,8 @@ int main() {
 				"离开游戏");
 
 	init_color_pair();
-	game_data.player.data.data = &game_data.entity_list[0];
+
+	game_data.player.data.data = &L_Entity[0];
 	while (input != 0) {
 		/* 菜单主循环 */
 		input = ctools_menu_Show(menu);

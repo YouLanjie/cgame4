@@ -13,7 +13,7 @@
 
 static int run_hook();
 
-#define MOV game_data.focus->block->opt[BLOCK_OPT_N_MOV]
+#define MOV (Opt_get(game_data.focus->block->opt, "Move")->var.i)
 
 /*
  * 处理用户输入

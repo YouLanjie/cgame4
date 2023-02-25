@@ -10,7 +10,9 @@
 
 #include "game.h"
 
-struct game_data game_data = {
+
+#define INFO &L_Drop[0]
+Data game_data = {
 	NULL,
 	NULL,
 	{
@@ -19,55 +21,15 @@ struct game_data game_data = {
 			100,
 			{10, 10},
 			{10, 10},
-			{&game_data.drop_list[0], &game_data.drop_list[0]},
-			{&game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0]},
-			{&game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0], &game_data.drop_list[0]},
+			{INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO},
 		},
-		PLAYER_DEF_Y,
-		PLAYER_DEF_X,
-		0,
-		0,
-		0
+		PLAYER_DEF_Y,    /* 初始Y轴 */
+		PLAYER_DEF_X,    /* 初始X轴 */
+		0,    /* 饥饿度 */
+		0,    /* 经验值 */
+		0     /* 等级 */
 	},
-	0,
-	/* Name Print Describe Hook Option */
-	{{"null", '~', "null",
-	  {NULL, NULL, NULL},
-	  {0, 0}}
-	},
-	{{"Player", '@', "player",
-	  {NULL, NULL, NULL},
-	  {0, 0}}
-	},
-	{{"Null", ' ', "虚空？未知",    /* 0 */
-	  {NULL, NULL, NULL},
-	  {-1, 0}},
-	 {"H_Wall", '-', "水平的墙",    /* 1 */
-	  {NULL, NULL, NULL},
-	  {0, 0}},
-	 {"V_Wall", '|', "垂直的墙",    /* 2 */
-	  {NULL, NULL, NULL},
-	  {0, 0}},
-	 {"floor", '.', "房间内部的地板",    /* 3 */
-	  {NULL, NULL, NULL},
-	  {1, 0}},
-	 {"V_Door close", '+', "对于垂直墙壁的关闭的门",    /* 4 */
-	  {NULL, block_n4_open_V_door, NULL},
-	  {0, 1}},
-	 {"H_Door close", '+', "对于水平墙壁的关闭的门",    /* 5 */
-	  {NULL, block_n4_open_H_door, NULL},
-	  {0, 1}},
-	 {"V_Door open", '-', "对于垂直墙壁的打开的门",    /* 6 */
-	  {NULL, NULL, NULL},
-	  {1, 0}},
-	 {"H_Door open", '|', "对于水平墙壁的打开的门",    /* 7 */
-	  {NULL, NULL, NULL},
-	  {1, 0}},
-	 {"corridor", '#', "这是走廊",    /* 8 */
-	  {NULL, NULL, NULL},
-	  {1, 0}}
-	 /* hook: run use attack */
-	}
+	0,    /* 难度 */
 };
 
 /* def a var to use timer */

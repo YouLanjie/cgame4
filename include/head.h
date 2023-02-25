@@ -30,7 +30,7 @@
 #define C_BLACK_BLUE 22
 #define C_BROWN_BLUE 23
 
-extern struct game_data game_data;
+extern Data game_data;
 
 /* About game data init */
 int init(void);
