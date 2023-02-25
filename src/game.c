@@ -8,8 +8,7 @@
  *
  */
 
-#include "game.h"
-
+#include "game/game.h"
 
 #define INFO &L_Drop[0]
 Data game_data = {
@@ -30,14 +29,13 @@ Data game_data = {
 		0     /* 等级 */
 	},
 	0,    /* 难度 */
+	0
 };
 
 /* def a var to use timer */
 struct itimerval tick;
 
 short LOCK;
-
-static int game_input_key(int *result);
 
 /*
  * 游戏函数
@@ -49,7 +47,7 @@ int game(int start_mode)
 	    l_usec = 0,
 	    l_sec  = 0;
 
-	init();
+	init2();
 	/* Seting of the clock time */
 	tick.it_interval.tv_sec  = 0;
 	tick.it_interval.tv_usec = 200000;
@@ -64,9 +62,10 @@ int game(int start_mode)
 	}
 	/* Start the clock */
 	setitimer(ITIMER_REAL, &tick, NULL);
+	game_data.running = 1;
 
 	while (input != 0) {
-		game_input_key(&input);
+		input = getch();
 		gettimeofday(&gettime, NULL);
 		if (gettime.tv_sec - l_sec < 1 &&
 		    gettime.tv_usec - l_usec < 10000) {
@@ -86,63 +85,6 @@ int game(int start_mode)
 		}
 	}
 	alarm(0);
+	game_data.running = 0;
 	return 0;
-}
-
-/*
- * 转换输入按键
- */
-static int game_input_key(int *result)
-{
-	*result = getch();
-	if (*result == 0x1B && ctools_kbhit() == 1 && getchar() == '[') {
-		*result = getchar();
-		switch (*result) {
-		case 'A':
-			*result = 'k';
-			break;
-		case 'B':
-			*result = 'j';
-			break;
-		case 'C':
-			*result = 'l';
-			break;
-		case 'D':
-			*result = 'h';
-			break;
-		default:
-			*result = 0;
-			return -1;
-			break;
-		}
-	}
-	switch (*result) {
-	case 'w':
-	case 'W':
-	case 'K':
-	case 0x10:
-		*result = 'k';
-		break;
-	case 's':
-	case 'S':
-	case 'J':
-	case 0xe:
-		*result = 'j';
-		break;
-	case 'd':
-	case 'D':
-	case 'L':
-	case 0x6:
-		*result = 'l';
-		break;
-	case 'a':
-	case 'A':
-	case 'H':
-	case 0x2:
-		*result = 'h';
-		break;
-	default:
-		break;
-	}
-	return *result;
 }

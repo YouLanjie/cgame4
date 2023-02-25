@@ -24,19 +24,21 @@ int main() {
 			    "1.开始游戏",
 			    "2.继续游戏",
 			    "3.历史记录",
+			    "4.设置",
 			    "4.退出",
 			    NULL);
 	ctools_menu_AddTextData(menu,
 				ctools_menu_TextDataDescribe,
 				"%s %s %s %s",
 				"开始新游戏",
-				"从存档加载",
-				"查看一些信息",
+				"从存档加载（未完成）",
+				"查看一些信息（未完成）",
+				"设置",
 				"离开游戏");
 
 	init_color_pair();
 
-	game_data.player.data.data = &L_Entity[0];
+	init();
 	while (input != 0) {
 		/* 菜单主循环 */
 		input = ctools_menu_Show(menu);
@@ -55,6 +57,9 @@ int main() {
 			game(2);
 			break;
 		}
+		case '4':
+			setting();
+			break;
 		default:
 			endwin();
 			printf("Unknow Error\nQuit");

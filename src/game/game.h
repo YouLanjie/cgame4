@@ -12,6 +12,7 @@
 #define GAME_H
 
 #include "../../include/head.h"
+#include "hook.h"
 
 /* def a var to use timer */
 extern struct itimerval tick;
@@ -23,9 +24,9 @@ void game_running();
 int game_running_use(void);
 int game_input(int *input);
 
-/* About game hook */
-int block_n4_open_V_door(void);
-int block_n4_open_H_door(void);
+int Move(Arg arg);
+int setting_ingame(Arg arg);
+int game_pause(Arg arg);
 
 /*
  * 关于选项
@@ -43,6 +44,8 @@ int map_set(int type, int name, int pos_y, int pos_x);
 int map_print(void);
 int map_mk_room(int y, int x);
 int map_mk_corridor(int y, int x);
+
+extern const Key Keys[];
 
 #endif
 

@@ -4,10 +4,13 @@
 # +OPTIONS: toc:nil
 #+LATEX_COMPILER: xelatex
 #+LATEX_HEADER: \usepackage[UTF8]{ctex}
-#+setupfile: https://yzs249175311.github.io/org-html-theme-dull/org-html-theme-dull.setup
+# +setupfile: https://yzs249175311.github.io/org-html-theme-dull/org-html-theme-dull.setup
 
 * 简介
 尝试做个类Rougerlike游戏
+
+我的这个程序有很多功能借鉴了dwm的写法，让我这个程序极易套娃，可以说是让我受益匪
+浅，在此表示感谢，我也挺推荐去观摩观摩其他大佬做的程序，能较快地提升自身的水平。
 
 * TODO[0/4]
 - [ ] 添加走廊

@@ -37,11 +37,9 @@ Info L_Drop[] = {
 int init(void)
 {
 	Arg arg = {.i = 0};
-	if (game_data.map != NULL) {
-		free_pro(game_data.map);
-	}
-	/* 列表初始化 */
 
+	game_data.player.data.data = &L_Entity[0];
+	/* 列表初始化 */
 #define BiARG(id, arg1, arg2)			\
 	arg.i = arg1;				\
 	Opt_add(&L_Block[id].opt, "Move", arg);	\
@@ -68,7 +66,17 @@ int init(void)
 	BiARG(LN_null,    -1, 0);
 #undef BiARG
 #undef BvARG
+	return 0;
+}
 
+/*
+ * 初始化游戏数据
+ */
+int init2(void)
+{
+	if (game_data.map != NULL) {
+		free_pro(game_data.map);
+	}
 	/* Init map */
 	map_init(MAP_HEIGHT, MAP_WIDTH);
 	game_data.focus = game_data.map;

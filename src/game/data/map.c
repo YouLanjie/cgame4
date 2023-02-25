@@ -190,7 +190,6 @@ int map_mk_corridor(int y, int x)
  */
 int map_print(void)
 {
-	Map *mAP = map;
 	clear();
 	attron(COLOR_PAIR(C_WHITE_BLUE));
 	map_get(1, 1);
@@ -242,6 +241,17 @@ int map_print(void)
 		 game_data.player.data.AT[1],
 		 game_data.player.XP,
 		 game_data.player.level);
+	mvprintw(MAP_HEIGHT + 2, 0,
+		 "L_hand:%s\tR_hand:%s\tR_hand_describe:%s",
+		 game_data.player.data.bag[0]->name,
+		 game_data.player.data.bag[1]->name,
+		 game_data.player.data.bag[1]->describe);
+	mvprintw(MAP_HEIGHT + 3, 0,
+		 "Head:%s\tBody:%s\tLeg:%s\tFoot:%s",
+		 game_data.player.data.bag[2]->name,
+		 game_data.player.data.bag[3]->name,
+		 game_data.player.data.bag[4]->name,
+		 game_data.player.data.bag[5]->name);
 	mvprintw(MAP_HEIGHT + 4, 0,
 		 "Y:%3d X:%3d",
 		 game_data.player.pos_y,

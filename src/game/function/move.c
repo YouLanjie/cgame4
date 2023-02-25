@@ -1,26 +1,26 @@
 /*
  *   Copyright (C) 2023 YouLanjie
  *
- *   文件名称：input.c
+ *   文件名称：move.c
  *   创 建 者：youlanjie
- *   创建日期：2023年02月01日
- *   描    述：处理用户的输入
+ *   创建日期：2023年02月25日
+ *   描    述：控制玩家移动
  *
  */
 
 
-#include "game.h"
+#include "../game.h"
 
 static int run_hook();
 
 #define MOV (Opt_get(game_data.focus->block->opt, "Move")->var.i)
 
 /*
- * 处理用户输入
+ * 控制玩家移动
  */
-int game_input(int *input)
+int Move(Arg arg)
 {
-	switch (*input) {
+	switch (arg.i) {
 	case 'k':
 		if (game_data.player.pos_y > 1) {
 			game_data.focus = game_data.focus->up;
@@ -62,13 +62,6 @@ int game_input(int *input)
 			game_data.focus = game_data.focus->left;
 		}
 		break;
-	case 'q':
-	case 'Q':
-	case 0x1b:
-		*input = 0;
-		break;
-	default:
-		break;
 	}
 	return 0;
 }
@@ -78,4 +71,5 @@ static int run_hook()
 	game_running_use();
 	return 0;
 }
+
 

@@ -17,11 +17,19 @@
 
 typedef union {
 	int    i;
+	int   *ip;
 	int  (*v)();
+	char   c;
 	char  *ch;
 	char (*v_ch)();
 	void (*v_v)();
 }Arg;
+
+typedef struct {
+	char   key;
+	int  (*v)(Arg arg);
+	Arg    arg;
+}Key;
 
 typedef struct game_info_opt Opt;
 typedef struct game_info_opt {
@@ -92,6 +100,7 @@ typedef struct {
 	Map    *focus;       /* 地图光标 */
 	Player  player;      /* 玩家 */
 	short   diffcult;    /* 难度 */
+	short   running;
 }Data;
 
 extern Info L_Block[];
