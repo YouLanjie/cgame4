@@ -11,7 +11,7 @@
 #ifndef DEF_H
 #define DEF_H
 
-#define BLOCK_LIST_MAX 5
+#define BLOCK_LIST_MAX 9
 #define ENTITY_LIST_MAX 1
 #define DROP_LIST_MAX 1
 

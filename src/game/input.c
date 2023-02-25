@@ -11,13 +11,9 @@
 
 #include "game.h"
 
-#define RUN_USE								\
-	do {								\
-		if (game_data.focus->block->opt[BLOCK_OPT_N_USE] == 1 && \
-		    game_data.focus->block->hook[BLOCK_HOOK_N_USE] != NULL) { \
-			game_data.focus->block->hook[BLOCK_HOOK_N_USE](); \
-		}							\
-	} while (0);
+static int run_hook();
+
+#define MOV game_data.focus->block->opt[BLOCK_OPT_N_MOV]
 
 /*
  * 处理用户输入
@@ -28,10 +24,10 @@ int game_input(int *input)
 	case 'k':
 		if (game_data.player.pos_y > 1) {
 			game_data.focus = game_data.focus->up;
-			if (game_data.focus->block->opt[0] == 1) {
+			if (MOV == 1) {
 				game_data.player.pos_y--;
 			}
-			RUN_USE;
+			run_hook();
 			game_data.focus = game_data.focus->down;
 
 		}
@@ -39,30 +35,30 @@ int game_input(int *input)
 	case 'j':
 		if (game_data.player.pos_y < MAP_HEIGHT) {
 			game_data.focus = game_data.focus->down;
-			if (game_data.focus->block->opt[0] == 1) {
+			if (MOV == 1) {
 				game_data.player.pos_y++;
 			}
-			RUN_USE;
+			run_hook();
 			game_data.focus = game_data.focus->up;
 		}
 		break;
 	case 'h':
 		if (game_data.player.pos_x > 1) {
 			game_data.focus = game_data.focus->left;
-			if (game_data.focus->block->opt[0] == 1) {
+			if (MOV == 1) {
 				game_data.player.pos_x--;
 			}
-			RUN_USE;
+			run_hook();
 			game_data.focus = game_data.focus->right;
 		}
 		break;
 	case 'l':
 		if (game_data.player.pos_x < MAP_WIDTH) {
 			game_data.focus = game_data.focus->right;
-			if (game_data.focus->block->opt[0] == 1) {
+			if (MOV == 1) {
 				game_data.player.pos_x++;
 			}
-			RUN_USE;
+			run_hook();
 			game_data.focus = game_data.focus->left;
 		}
 		break;
@@ -77,4 +73,9 @@ int game_input(int *input)
 	return 0;
 }
 
-#undef RUN_USE
+static int run_hook()
+{
+	game_running_use();
+	return 0;
+}
+

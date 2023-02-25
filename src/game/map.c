@@ -129,25 +129,59 @@ int map_mk_room(int y, int x)
 	BORE = 0 - BORE;
 	gettimeofday(&gettime, NULL);
 	srand(gettime.tv_usec);
-	BORE = rand() % (BORE - 1) + 1;
+	BORE = rand() % (BORE - 5) + 1;
 
 	/* 创建房间 */
 	for (int i = point[0]; i <= y2; ++i) {
 		for (int i2 = point[1]; i2 <= x2; ++i2) {
 			map_get(i, i2);
-			if (i == point[0] || i == y2 ||
-			    i2 == point[1] || i2 == x2) {
+			if (i == point[0] || i == y2) {
 				if (BORE == 0) {
-					game_data.focus->block = &game_data.block_list[3];
-					BORE--;
+					if (i2 != point[1] && i2 != x2) {
+						game_data.focus->block = &game_data.block_list[5];
+						BORE--;
+					} else {
+						game_data.focus->block = &game_data.block_list[1];
+					}
 				} else {
 					game_data.focus->block = &game_data.block_list[1];
 					BORE--;
 				}
+			} else if (i2 == point[1] || i2 == x2) {
+				if (BORE == 0) {
+					if (i != point[0] && i != y2) {
+						game_data.focus->block = &game_data.block_list[4];
+						BORE--;
+					} else {
+						game_data.focus->block = &game_data.block_list[1];
+					}
+				} else {
+					game_data.focus->block = &game_data.block_list[2];
+					BORE--;
+				}
 			} else {
-				game_data.focus->block = &game_data.block_list[2];
+				game_data.focus->block = &game_data.block_list[3];
 			}
 		}
+	}
+	return 0;
+}
+
+/*
+ * 创建房间
+ */
+int map_mk_corridor(int y, int x)
+{
+	struct timeval gettime;
+	gettimeofday(&gettime, NULL);
+	srand(gettime.tv_usec + gettime.tv_sec);
+	point[0] = y - (y <= 2 ? 0: rand() % 3) - 1;
+	usleep(10 + rand() % 1000);
+	while (point[0] <= 0 || y - point[0] < 1) {
+		gettimeofday(&gettime, NULL);
+		srand(gettime.tv_usec + gettime.tv_sec);
+		point[0] = y - (y <= 2 ? 0: rand() % 3) - 1;
+		usleep(10 + rand() % 1000);
 	}
 	return 0;
 }

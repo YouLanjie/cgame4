@@ -28,3 +28,16 @@ void game_running(void)
 	return;
 }
 
+/*
+ * 调用使用函数
+ */
+int game_running_use(void)
+{
+	if (game_data.focus->block->opt[BLOCK_OPT_N_USE] == 1 &&
+	    game_data.focus->block->hook[BLOCK_HOOK_N_USE] != NULL) {
+		game_data.focus->block->hook[BLOCK_HOOK_N_USE]();
+	}
+	return 0;
+}
+
+

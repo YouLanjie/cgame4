@@ -20,10 +20,12 @@ extern short LOCK;
 
 /* About game running */
 void game_running();
+int game_running_use(void);
 int game_input(int *input);
 
 /* About game hook */
-int block_n4_open_door(void);
+int block_n4_open_V_door(void);
+int block_n4_open_H_door(void);
 
 /*
  * About game map
@@ -33,6 +35,7 @@ int map_get(int pos_y, int pos_x);
 int map_set(int type, int id, int pos_y, int pos_x);
 int map_print(void);
 int map_mk_room(int y, int x);
+int map_mk_corridor(int y, int x);
 
 #endif
 
