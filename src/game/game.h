@@ -12,7 +12,8 @@
 #define GAME_H
 
 #include "../../include/head.h"
-#include "hook.h"
+#include "hook/hook.h"
+#include "function/function.h"
 
 /* def a var to use timer */
 extern struct itimerval tick;
@@ -23,10 +24,6 @@ extern short LOCK;
 void game_running();
 int game_running_use(void);
 int game_input(int *input);
-
-int Move(Arg arg);
-int setting_ingame(Arg arg);
-int game_pause(Arg arg);
 
 /*
  * 关于选项

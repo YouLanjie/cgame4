@@ -26,3 +26,15 @@ int block_n4_open_H_door(void)
 	return 0;
 }
 
+int block_n4_close_V_door(void)
+{
+	game_data.focus->block = &L_Block[LN_vDoorC];
+	return 0;
+}
+
+int block_n4_close_H_door(void)
+{
+	game_data.focus->block = &L_Block[LN_hDoorC];
+	return 0;
+}
+

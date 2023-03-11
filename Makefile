@@ -11,7 +11,7 @@ all: cgame4
 
 $(prom): $(OBJ)
 	@if [ ! -d "$(BIN)" ]; then mkdir $(BIN); fi
-	$(CC) -z now $(OBJ) -lncurses -L lib -ltools -o $(BIN)/main
+	$(CC) -z now $(OBJ) -lncurses -o $(BIN)/main
 
 %.o: %.c $(incl)
 	$(CC) -g -Wall -c $< -o $@

@@ -22,7 +22,7 @@ Opt *Opt_add(Opt **obj, char *name, Arg var)
 		(*obj)->next = malloc(sizeof(Opt));
 		obj = &(*obj)->next;
 	}
-	(*obj)->name = malloc(strlen(name));
+	(*obj)->name = malloc(strlen(name) + 1);
 	(*obj)->var  = var;
 	(*obj)->next = NULL;
 	strcpy((*obj)->name, name);

@@ -34,6 +34,7 @@ void game_running(void)
 int game_running_use(void)
 {
 	if (Opt_get(game_data.focus->block->opt, "Use")->var.i == 1 &&
+	    Opt_get(game_data.focus->block->opt, "Hook Use") != NULL &&
 	    Opt_get(game_data.focus->block->opt, "Hook Use")->var.v != NULL) {
 		Opt_get(game_data.focus->block->opt, "Hook Use")->var.v();
 	}

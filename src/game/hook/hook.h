@@ -12,8 +12,12 @@
 #define HOOK_H
 
 /* About game hook */
+/* Door */
 int block_n4_open_V_door(void);
 int block_n4_open_H_door(void);
+
+int block_n4_close_V_door(void);
+int block_n4_close_H_door(void);
 
 #endif
 

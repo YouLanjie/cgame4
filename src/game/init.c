@@ -60,8 +60,12 @@ int init(void)
 	BiARG(LN_hDoorC,   0, 1);
 	BvARG(LN_hDoorC,         "Hook Use",
 	                         block_n4_open_H_door);
-	BiARG(LN_vDoorO,   1, 0);
-	BiARG(LN_hDoorO,   1, 0);
+	BiARG(LN_vDoorO,   1, 2);
+	BvARG(LN_vDoorO,         "Hook Use",
+	                         block_n4_close_V_door);
+	BiARG(LN_hDoorO,   1, 2);
+	BvARG(LN_hDoorO,         "Hook Use",
+	                         block_n4_close_H_door);
 	BiARG(LN_corridor, 1, 0);
 	BiARG(LN_null,    -1, 0);
 #undef BiARG
