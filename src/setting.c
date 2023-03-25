@@ -35,16 +35,6 @@ int setting(void)
 				"设置垂直方向的墙壁方块能让玩家行走",
 				"设置水平方向的墙壁方块能让玩家行走"
 	);
-	ctools_menu_AddTextData(menu, ctools_menu_TextDataSetType,
-				"n%s%s%s",
-				1, 1, 1
-	);
-	ctools_menu_AddTextData(menu, ctools_menu_TextDataSetVar,
-				"n%s%s%s",
-				&Opt_get(L_Block[LN_null].opt, "Move")->var.i,
-				&Opt_get(L_Block[LN_vWall].opt, "Move")->var.i,
-				&Opt_get(L_Block[LN_hWall].opt, "Move")->var.i
-	);
 	ctools_menu_Show(menu);
 	return 0;
 }

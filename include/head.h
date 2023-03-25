@@ -34,7 +34,6 @@ extern Data game_data;
 
 /* About game data init */
 int init(void);
-int init2(void);
 
 int game(int start_mode);
 int setting(void);

@@ -28,16 +28,19 @@ int game_input(int *input);
 /*
  * 关于选项
  */
-Opt *Opt_add(Opt **obj, char *name, Arg var);
-Opt *Opt_get(Opt *Obj, char * name);
-int Opt_Mget(Opt *Obj);
+char *Opt_get(Info const *list, char const * rule, char const * const name);
 
 /*
- * About game map
+ * 关于节点
+ */
+Info *get_info(Info *list, char const *name);
+
+/*
+ * 关于游戏地图
  */
 /* 移动光标 */
 int map_get(int pos_y, int pos_x);
-int map_set(int type, int name, int pos_y, int pos_x);
+int map_set(int type, char const * name, int pos_y, int pos_x);
 int map_print(void);
 int map_mk_room(int y, int x);
 int map_mk_corridor(int y, int x);

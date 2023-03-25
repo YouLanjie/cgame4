@@ -43,17 +43,17 @@ int map_get(int pos_y, int pos_x)
 /*
  * 设置地图存储信息
  */
-int map_set(int type, int name, int pos_y, int pos_x)
+int map_set(int type, char const * name, int pos_y, int pos_x)
 {
 	map_get(pos_y, pos_x);
 	if (type == 1) {    /* 方块 */
-		game_data.focus->block = &L_Block[name];
-	} else if (type == 2 && Opt_get(L_Entity[name].opt, "type")->var.i == 1) {    /* 友好生物 */
-		game_data.focus->friendly->data = &L_Entity[name];
-	} else if (type == 3 && Opt_get(L_Block[name].opt, "type")->var.i == 2) {    /* 友好生物 */
-		game_data.focus->monsters->data = &L_Entity[name];
+		game_data.focus->block = get_info(L_Block, name);
+	} else if (type == 2 && Opt_get(get_info(L_Entity, name), NULL, "type")[0] == '1') {    /* 友好生物 */
+		game_data.focus->friendly->data = get_info(L_Entity, name);
+	} else if (type == 3 && Opt_get(get_info(L_Entity, name), NULL, "type")[0] == 2) {    /* 敌对生物 */
+		game_data.focus->monsters->data = get_info(L_Entity, name);
 	} else if (type == 4) {    /* 掉落物 */
-		game_data.focus->drop->data = &L_Drop[name];
+		game_data.focus->drop->data = get_info(L_Drop, name);
 	}
 	return 0;
 }
@@ -113,7 +113,7 @@ int map_mk_room(int y, int x)
 				map_get(i, i2);
 				if (i != point[0] && i != y2 &&
 				    i2 != point[1] && i2 != x2) {
-					if (game_data.focus->block != &L_Block[LN_null]) {
+					if (game_data.focus->block != get_info(L_Block, "Null")) {
 						BORE = 1;
 						break;
 					} else {
@@ -136,29 +136,29 @@ int map_mk_room(int y, int x)
 			if (i == point[0] || i == y2) {
 				if (BORE == 0) {
 					if (i2 != point[1] && i2 != x2) {
-						game_data.focus->block = &L_Block[LN_hDoorC];
+						game_data.focus->block = get_info(L_Block, "H_Door_c");
 						BORE--;
 					} else {
-						game_data.focus->block = &L_Block[LN_hWall];
+						game_data.focus->block = get_info(L_Block, "H_Wall");
 					}
 				} else {
-					game_data.focus->block = &L_Block[LN_hWall];
+					game_data.focus->block = get_info(L_Block, "H_Wall");
 					BORE--;
 				}
 			} else if (i2 == point[1] || i2 == x2) {
 				if (BORE == 0) {
 					if (i != point[0] && i != y2) {
-						game_data.focus->block = &L_Block[LN_vDoorC];
+						game_data.focus->block = get_info(L_Block, "V_Door_c");
 						BORE--;
 					} else {
-						game_data.focus->block = &L_Block[LN_hWall];
+						game_data.focus->block = get_info(L_Block, "H_Wall");
 					}
 				} else {
-					game_data.focus->block = &L_Block[LN_vWall];
+					game_data.focus->block = get_info(L_Block, "V_Wall");
 					BORE--;
 				}
 			} else {
-				game_data.focus->block = &L_Block[LN_floor];
+				game_data.focus->block = get_info(L_Block, "Floor");
 			}
 		}
 	}
@@ -197,13 +197,17 @@ int map_print(void)
 		map_get(i, 1);
 		for (int i2 = 1; map->right != NULL; ++i2) {
 			map_get(i, i2);
-			if (Opt_get(map->block->opt, "Move")->var.i == -1) {
+			if (Opt_get(map->block, L_B_Rule, "Color")[0] == 'f') {
 				attroff(COLOR_PAIR(C_WHITE_BLUE));
 			}
 			/* 打印方块 */
-			mvprintw(i - 1, i2 - 1, "%c",
-				 map->block->print_ch);
-			if (Opt_get(map->block->opt, "Move")->var.i == -1) {
+			if (map->block != NULL) {
+				mvprintw(i - 1, i2 - 1, "%c",
+					 map->block->print_ch);
+			} else {
+				mvprintw(i - 1, i2 - 1, "?");
+			}
+			if (Opt_get(map->block, L_B_Rule, "Color")[0] == 'f') {
 				attron(COLOR_PAIR(C_WHITE_BLUE));
 			}
 			/* 打印掉落物 */
@@ -257,12 +261,22 @@ int map_print(void)
 		 game_data.player.pos_y,
 		 game_data.player.pos_x);
 	map_get(game_data.player.pos_y, game_data.player.pos_x);
-	mvprintw(MAP_HEIGHT + 5, 0,
-		 "Block Name:%s",
-		 game_data.focus->block->name);
-	mvprintw(MAP_HEIGHT + 6, 0,
-		 "Block Describe:%s",
-		 game_data.focus->block->describe);
+	if (game_data.focus->block != NULL) {
+		mvprintw(MAP_HEIGHT + 5, 0,
+			 "Block Name:%s",
+			 game_data.focus->block->name);
+		mvprintw(MAP_HEIGHT + 6, 0,
+			 "Block Describe:%s",
+			 game_data.focus->block->describe);
+		mvprintw(MAP_HEIGHT + 7, 0, "规则探测结果:%s",
+			 Opt_get(game_data.focus->block, L_B_Rule, "Color"));
+		mvprintw(MAP_HEIGHT + 8, 0, "规则探测结果:%x",
+			 Opt_get(game_data.focus->block, L_B_Rule, "Color")[0]);
+		mvprintw(MAP_HEIGHT + 9, 0, "规则集:%s",
+			 game_data.focus->block->opt);
+		mvprintw(MAP_HEIGHT + 10, 0, "规则集2:%s",
+			 L_B_Rule);
+	}
 	refresh();
 	return 0;
 }

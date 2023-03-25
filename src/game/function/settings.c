@@ -14,7 +14,7 @@
 /*
  * 从游戏的内部调用函数
  */
-int setting_ingame(Arg arg)
+int setting_ingame(void)
 {
 	alarm(0);
 	game_data.running = 0;

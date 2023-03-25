@@ -38,7 +38,6 @@ int main() {
 
 	init_color_pair();
 
-	init();
 	while (input != 0) {
 		/* 菜单主循环 */
 		input = ctools_menu_Show(menu);

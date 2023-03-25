@@ -10,28 +10,6 @@
 
 #include "game/game.h"
 
-#define INFO &L_Drop[0]
-Data game_data = {
-	NULL,
-	NULL,
-	{
-		{
-			NULL,
-			100,
-			{10, 10},
-			{10, 10},
-			{INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO, INFO},
-		},
-		PLAYER_DEF_Y,    /* 初始Y轴 */
-		PLAYER_DEF_X,    /* 初始X轴 */
-		0,    /* 饥饿度 */
-		0,    /* 经验值 */
-		0     /* 等级 */
-	},
-	0,    /* 难度 */
-	0
-};
-
 /* def a var to use timer */
 struct itimerval tick;
 
@@ -47,7 +25,7 @@ int game(int start_mode)
 	    l_usec = 0,
 	    l_sec  = 0;
 
-	init2();
+	init();
 	/* Seting of the clock time */
 	tick.it_interval.tv_sec  = 0;
 	tick.it_interval.tv_usec = 200000;

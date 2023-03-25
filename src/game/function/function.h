@@ -11,8 +11,8 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
-int Move(Arg arg);
-int setting_ingame(Arg arg);
-int game_pause(Arg arg);
+int Move(char *way);
+int setting_ingame();
+int game_pause();
 
 #endif

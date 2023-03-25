@@ -14,7 +14,7 @@
 /*
  * 暂停函数
  */
-int game_pause(Arg arg)
+int game_pause(void)
 {
 	if (game_data.running == 0) {
 		setitimer(ITIMER_REAL, &tick, NULL);

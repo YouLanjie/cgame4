@@ -13,11 +13,10 @@
 /*
  * 手动使用某个方向的对象
  */
-int use(Arg arg)
+int use(void)
 {
 	mvprintw(MAP_WIDTH + 7, 0, "Which direction?");
 	refresh();
-	
 	return 0;
 }
 

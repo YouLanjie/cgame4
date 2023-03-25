@@ -15,36 +15,20 @@
  * 基本数据存储结构定义
  */
 
-typedef union {
-	int    i;
-	int   *ip;
-	int  (*v)();
-	char   c;
-	char  *ch;
-	char (*v_ch)();
-	void (*v_v)();
-}Arg;
-
 typedef struct {
 	char   key;
-	int  (*v)(Arg arg);
-	Arg    arg;
+	int  (*v)(char *arg);
+	char  *arg;
 }Key;
 
-typedef struct game_info_opt Opt;
-typedef struct game_info_opt {
-	char *name;
-	Arg   var;
-	Opt  *next;
-}Opt;
-
 /* 基本信息 */
-typedef struct {
-	const char *name;        /* 名字 */
-	const char  print_ch;    /* 打印使用字符 */
-	const char *describe;    /* 描述 */
-	/* Option */
-	Opt (*opt);
+typedef struct Info_t {
+	char          *const name;        /* 名字 */
+	char           const print_ch;    /* 打印使用字符 */
+	char          *const describe;    /* 描述 */
+	char          *const opt;         /* 选项 */
+	int          (*const hook)();     /* Hook */
+	struct Info_t *const next;
 }Info;
 
 /* 实体 */
@@ -103,18 +87,9 @@ typedef struct {
 	short   running;
 }Data;
 
+
 extern Info L_Block[];
-enum LN_Block{
-	LN_hWall = 0,
-	LN_vWall,
-	LN_floor,
-	LN_vDoorC,
-	LN_hDoorC,
-	LN_vDoorO,
-	LN_hDoorO,
-	LN_corridor,
-	LN_null
-};
+extern char *const L_B_Rule;
 extern Info L_Entity[];
 extern Info L_Drop[];
 

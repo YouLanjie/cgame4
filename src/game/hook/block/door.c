@@ -16,25 +16,25 @@
  */
 int block_n4_open_V_door(void)
 {
-	game_data.focus->block = &L_Block[LN_vDoorO];
+	game_data.focus->block = get_info(L_Block, "V_Door_o");
 	return 0;
 }
 
 int block_n4_open_H_door(void)
 {
-	game_data.focus->block = &L_Block[LN_hDoorO];
+	game_data.focus->block = get_info(L_Block, "H_Door_o");
 	return 0;
 }
 
 int block_n4_close_V_door(void)
 {
-	game_data.focus->block = &L_Block[LN_vDoorC];
+	game_data.focus->block = get_info(L_Block, "V_Door_c");
 	return 0;
 }
 
 int block_n4_close_H_door(void)
 {
-	game_data.focus->block = &L_Block[LN_hDoorC];
+	game_data.focus->block = get_info(L_Block, "H_Door_c");
 	return 0;
 }
 

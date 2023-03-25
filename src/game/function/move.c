@@ -13,18 +13,18 @@
 
 static int run_hook();
 
-#define MOV (Opt_get(game_data.focus->block->opt, "Move")->var.i)
+#define MOV (Opt_get(game_data.focus->block, L_B_Rule, "Move")[0])
 
 /*
  * 控制玩家移动
  */
-int Move(Arg arg)
+int Move(char *way)
 {
-	switch (arg.i) {
+	switch (*way) {
 	case 'k':
 		if (game_data.player.pos_y > 1) {
 			game_data.focus = game_data.focus->up;
-			if (MOV == 1) {
+			if (MOV == 't') {
 				game_data.player.pos_y--;
 			}
 			run_hook();
@@ -35,7 +35,7 @@ int Move(Arg arg)
 	case 'j':
 		if (game_data.player.pos_y < MAP_HEIGHT) {
 			game_data.focus = game_data.focus->down;
-			if (MOV == 1) {
+			if (MOV == 't') {
 				game_data.player.pos_y++;
 			}
 			run_hook();
@@ -45,7 +45,7 @@ int Move(Arg arg)
 	case 'h':
 		if (game_data.player.pos_x > 1) {
 			game_data.focus = game_data.focus->left;
-			if (MOV == 1) {
+			if (MOV == 't') {
 				game_data.player.pos_x--;
 			}
 			run_hook();
@@ -55,7 +55,7 @@ int Move(Arg arg)
 	case 'l':
 		if (game_data.player.pos_x < MAP_WIDTH) {
 			game_data.focus = game_data.focus->right;
-			if (MOV == 1) {
+			if (MOV == 't') {
 				game_data.player.pos_x++;
 			}
 			run_hook();
