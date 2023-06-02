@@ -14,33 +14,33 @@
 static void init_color_pair(void);
 
 int main() {
-	ctools_menu_t * menu = NULL;
+	const ctools_menu *m = &CT_MENU;
+	struct ctools_menu_t * menu = NULL;
 	int input = 1;
 
 	/* Setting about menu */
-	ctools_menu_Init();
-	ctools_menu_t_init(&menu);
-	ctools_menu_AddText(menu,
+	m->ncurses_init();
+	m->data_init(&menu);
+	m->add_text(menu,
 			    "1.开始游戏",
 			    "2.继续游戏",
 			    "3.历史记录",
 			    "4.设置",
 			    "4.退出",
 			    NULL);
-	ctools_menu_AddTextData(menu,
-				ctools_menu_TextDataDescribe,
+	m->add_text_data(menu,
+				"describe",
 				"%s %s %s %s",
 				"开始新游戏",
 				"从存档加载（未完成）",
 				"查看一些信息（未完成）",
 				"设置",
 				"离开游戏");
-
 	init_color_pair();
 
 	while (input != 0) {
 		/* 菜单主循环 */
-		input = ctools_menu_Show(menu);
+		input = m->show(menu);
 		clear();
 		refresh();
 		switch (input) {
